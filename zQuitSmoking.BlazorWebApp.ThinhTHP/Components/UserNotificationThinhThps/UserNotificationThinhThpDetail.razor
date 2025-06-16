@@ -1,0 +1,20 @@
+﻿@page "/UserNotificationThinhThps/UserNotificationThinhThpDetail/{UserNotificationThinhThpid:int}"
+@using zQuitSmoking.Repositories.ThinhTHP.Models
+
+
+<h3>UserNotificationThinhThpDetail</h3>
+
+@code {
+	[Parameter]
+	public int UserNotificationThinhThpId { get; set; }
+
+	private UserNotificationThinhThp un;
+
+	protected override async Task OnInitializedAsync()
+	{
+		//// Slow living
+		//await Task.Delay(1000);
+
+		un = await ServiceProviders.UserNotificationThinhThpService.GetByIdAsync(UserNotificationThinhThpId);
+	}
+}

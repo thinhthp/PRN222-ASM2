@@ -1,0 +1,73 @@
+﻿@page "/UserNotificationThinhThps/UserNotificationThinhThpList"
+@using Microsoft.Extensions.DependencyInjection
+@using zQuitSmoking.Repositories.ThinhTHP.Models
+@using zQuitSmoking.BlazorWebApp.ThinhTHP.Components.Shared
+@using Microsoft.AspNetCore.Components.Web
+@inject NavigationManager NavigationManager
+
+<h3>User Notification List</h3>
+
+<div class="d-flex justify-content-between mb-3">
+    <div>
+        <button class="btn btn-primary">
+            <span class="oi oi-plus"></span> Add New Notification
+        </button>
+    </div>
+</div>
+
+@if (userNotifications == null)
+{
+    <LoadingSpinner />
+    <Hampster />
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Notification</th>
+                <th>Sent Date</th>
+                <th>Read</th>
+                <th>Response</th>
+                <th>Status</th>
+                <th>Attempt Count</th>
+                <th>Last Attempt</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var un in userNotifications)
+            {
+                <tr>
+                    <td>@un.UserNotificationThinhThpid</td>
+                    <td>@(un.UserAccount?.UserName ?? $"ID: {un.UserAccountId}")</td>
+                    <td>@(un.NotificationThinhThp?.Message ?? $"ID: {un.NotificationThinhThpid}")</td>
+                    <td>@(un.SentDate?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")</td>
+                    <td>@(un.IsRead == true ? "Yes" : "No")</td>
+                    <td>@(string.IsNullOrEmpty(un.Response) ? "N/A" : un.Response)</td>
+                    <td>@(string.IsNullOrEmpty(un.Status) ? "N/A" : un.Status)</td>
+                    <td>@(un.AttemptCount ?? 0)</td>
+                    <td>@(un.LastAttemptDate?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="/UserNotificationThinhThps/UserNotificationThinhThpDetail/@un.UserNotificationThinhThpid" class="btn btn-sm btn-primary">Detail</a>
+                            <a href="/Transactions/TransactionCashDepositSlipForm/@un.UserNotificationThinhThpid" class="btn btn-sm btn-warning">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<UserNotificationThinhThp> userNotifications;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        userNotifications = await ServiceProviders.UserNotificationThinhThpService.GetAllAsync();
+    }
+}
