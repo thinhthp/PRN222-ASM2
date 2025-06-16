@@ -3,7 +3,45 @@
 
 
 <h3>UserNotificationThinhThpDetail</h3>
+@if (un == null)
+{
+	<div>Loading...</div>
+}
+else
+{
+	<div class="card">
+		<div class="card-body">
+			<dl class="row">
+				<dt class="col-sm-3">ID</dt>
+				<dd class="col-sm-9">@un.UserNotificationThinhThpid</dd>
 
+				<dt class="col-sm-3">User</dt>
+				<dd class="col-sm-9">@((un.UserAccount?.UserName) ?? $"ID: {un.UserAccountId}")</dd>
+
+				<dt class="col-sm-3">Notification</dt>
+				<dd class="col-sm-9">@((un.NotificationThinhThp?.Message) ?? $"ID: {un.NotificationThinhThpid}")</dd>
+
+				<dt class="col-sm-3">Sent Date</dt>
+				<dd class="col-sm-9">@((un.SentDate?.ToString("yyyy-MM-dd HH:mm")) ?? "N/A")</dd>
+
+				<dt class="col-sm-3">Read</dt>
+				<dd class="col-sm-9">@((un.IsRead == true) ? "Yes" : "No")</dd>
+
+				<dt class="col-sm-3">Response</dt>
+				<dd class="col-sm-9">@(!string.IsNullOrEmpty(un.Response) ? un.Response : "N/A")</dd>
+
+				<dt class="col-sm-3">Status</dt>
+				<dd class="col-sm-9">@(!string.IsNullOrEmpty(un.Status) ? un.Status : "N/A")</dd>
+
+				<dt class="col-sm-3">Attempt Count</dt>
+				<dd class="col-sm-9">@((un.AttemptCount ?? 0))</dd>
+
+				<dt class="col-sm-3">Last Attempt</dt>
+				<dd class="col-sm-9">@((un.LastAttemptDate?.ToString("yyyy-MM-dd HH:mm")) ?? "N/A")</dd>
+			</dl>
+		</div>
+	</div>
+}
 @code {
 	[Parameter]
 	public int UserNotificationThinhThpId { get; set; }
