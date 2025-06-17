@@ -15,7 +15,7 @@ public partial class UserNotificationThinhThp
 
     public DateTime? SentDate { get; set; }
 
-    public bool? IsRead { get; set; }
+    public bool IsRead { get; set; }
 
     public string Response { get; set; }
 

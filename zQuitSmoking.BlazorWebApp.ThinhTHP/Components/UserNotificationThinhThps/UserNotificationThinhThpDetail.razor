@@ -1,11 +1,18 @@
 ﻿@page "/UserNotificationThinhThps/UserNotificationThinhThpDetail/{UserNotificationThinhThpid:int}"
+@using zQuitSmoking.BlazorWebApp.ThinhTHP.Components.Shared
 @using zQuitSmoking.Repositories.ThinhTHP.Models
 
 
 <h3>UserNotificationThinhThpDetail</h3>
 @if (un == null)
 {
-	<div>Loading...</div>
+	<div class="d-flex justify-content-center align-items-center" style="min-height: 50vh;">
+		<Hampster />
+		<Hampster />
+		<Hampster />
+		<Hampster />
+		<Hampster />
+	</div>
 }
 else
 {
@@ -50,9 +57,7 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		//// Slow living
-		//await Task.Delay(1000);
-
+		await Task.Delay(2000);
 		un = await ServiceProviders.UserNotificationThinhThpService.GetByIdAsync(UserNotificationThinhThpId);
 	}
 }

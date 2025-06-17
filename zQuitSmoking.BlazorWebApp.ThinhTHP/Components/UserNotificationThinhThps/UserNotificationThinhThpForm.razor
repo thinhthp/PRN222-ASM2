@@ -1,5 +1,135 @@
-﻿<h3>UserNotificationThinhThpForm</h3>
+﻿@page "/UserNotificationThinhThps/UserNotificationThinhThpForm"
+@page "/UserNotificationThinhThps/UserNotificationThinhThpForm/{Id:int}"
+@using Microsoft.AspNetCore.Components.Forms
+@using zQuitSmoking.Repositories.ThinhTHP.Models
+
+<div class="container mt-4">
+    <h3>@(Id.HasValue ? "Edit" : "Create") User Notification</h3>
+
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @ErrorMessage
+        </div>
+    }
+
+    <EditForm Model="@Model" OnValidSubmit="async() => await HandleValidSubmit()" class="mt-4">
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+            <label class="form-label">User Email</label>
+            <InputSelect class="form-select" @bind-Value="Model.UserAccountId">
+                <option value="">Select a user</option>
+                @foreach (var user in UserAccounts)
+                {
+                    <option value="@user.UserAccountId">@user.Email</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Model.UserAccountId)" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Notification Message</label>
+            <InputSelect class="form-select" @bind-Value="Model.NotificationThinhThpid">
+                <option value="">Select a notification</option>
+                @foreach (var noti in Notifications)
+                {
+                    <option value="@noti.NotificationThinhThpid">@noti.Message</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Model.NotificationThinhThpid)" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Sent Date</label>
+            <InputDate class="form-control" @bind-Value="Model.SentDate" />
+            <ValidationMessage For="@(() => Model.SentDate)" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Is Read</label>
+            <InputCheckbox class="form-check-input" @bind-Value="Model.IsRead" />
+            <ValidationMessage For="@(() => Model.IsRead)" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Response</label>
+            <InputTextArea class="form-control" @bind-Value="Model.Response" rows="4" />
+            <ValidationMessage For="@(() => Model.Response)" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <InputText class="form-control" @bind-Value="Model.Status" />
+            <ValidationMessage For="@(() => Model.Status)" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Attempt Count</label>
+            <InputNumber class="form-control" @bind-Value="Model.AttemptCount" />
+            <ValidationMessage For="@(() => Model.AttemptCount)" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Last Attempt Date</label>
+            <InputDate class="form-control" @bind-Value="Model.LastAttemptDate" />
+            <ValidationMessage For="@(() => Model.LastAttemptDate)" />
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="/UserNotificationThinhThps" class="btn btn-secondary ms-2">Cancel</a>
+        </div>
+    </EditForm>
+</div>
 
 @code {
+    [Parameter]
+    public int? Id { get; set; }
 
+    private UserNotificationThinhThp Model { get; set; } = new();
+
+    private List<SystemUserAccount> UserAccounts { get; set; } = new();
+
+    private List<NotificationThinhThp> Notifications { get; set; } = new();
+
+    private string? ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserAccounts = await ServiceProviders.SystemUserAccountService.GetAllAsync();
+        Notifications = await ServiceProviders.NotificationThinhThpService.GetAllAsync();
+        if (Id.HasValue && Id.Value > 0)
+        {
+            var entity = await ServiceProviders.UserNotificationThinhThpService.GetByIdAsync(Id.Value);
+            if (entity != null)
+            {
+                Model = entity;
+            }
+            else
+            {
+                ErrorMessage = "User Notification not found.";
+            }
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (Model.UserNotificationThinhThpid == 0)
+            {
+                await ServiceProviders.UserNotificationThinhThpService.CreateAsync(Model);
+            }
+            else
+            {
+                await ServiceProviders.UserNotificationThinhThpService.UpdateAsync(Model);
+            }
+            NavigationManager.NavigateTo("/UserNotificationThinhThps/UserNotificationThinhThpList");
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    }
 }
