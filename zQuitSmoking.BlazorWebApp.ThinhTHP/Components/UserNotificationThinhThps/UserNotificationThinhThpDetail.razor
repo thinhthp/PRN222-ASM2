@@ -46,6 +46,10 @@ else
 				<dt class="col-sm-3">Last Attempt</dt>
 				<dd class="col-sm-9">@((un.LastAttemptDate?.ToString("yyyy-MM-dd HH:mm")) ?? "N/A")</dd>
 			</dl>
+			<div class="btn-group">
+				<a href="/UserNotificationThinhThps/UserNotificationThinhThpForm/@un.UserNotificationThinhThpid" class="btn btn-sm btn-warning d-flex justify-content-center align-items-center">Edit</a>
+				<button type="button" class="btn btn-danger" @onclick="() => ConfirmDelete(UserNotificationThinhThpId)">Delete</button>
+			</div>
 		</div>
 	</div>
 }
@@ -59,5 +63,32 @@ else
 	{
 		await Task.Delay(2000);
 		un = await ServiceProviders.UserNotificationThinhThpService.GetByIdAsync(UserNotificationThinhThpId);
+	}
+
+
+
+
+
+
+	private async Task ConfirmDelete(int id)
+	{
+		bool confirmed = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this notification?");
+		if (confirmed)
+		{
+			await DeleteUserNotification(id);
+		}
+	}
+
+	private async Task DeleteUserNotification(int id)
+	{
+		if (await ServiceProviders.UserNotificationThinhThpService.DeleteAsync(id))
+		{
+			NavigationManager.NavigateTo("/UserNotificationThinhThps/UserNotificationThinhThpList");
+		}
+		else
+		{
+			// Handle error case
+			Console.WriteLine("Failed to delete user notification.");
+		}
 	}
 }
