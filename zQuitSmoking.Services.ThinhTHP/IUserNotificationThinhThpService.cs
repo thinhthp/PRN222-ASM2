@@ -11,7 +11,7 @@ namespace zQuitSmoking.Services.ThinhTHP
     {
         Task<List<UserNotificationThinhThp>> GetAllAsync();
         Task<UserNotificationThinhThp> GetByIdAsync(int code);
-        Task<List<UserNotificationThinhThp>> SearchAsync(string message, DateTime date, int userId);
+        Task<List<UserNotificationThinhThp>> SearchAsync(string message, string response, string userName);
         Task<int> CreateAsync(UserNotificationThinhThp userNotificationThinhThp);
         Task<int> UpdateAsync(UserNotificationThinhThp userNotificationThinhThp);
         Task<bool> DeleteAsync(int code);

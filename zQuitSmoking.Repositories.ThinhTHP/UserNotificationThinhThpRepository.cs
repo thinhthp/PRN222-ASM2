@@ -32,14 +32,15 @@ namespace zQuitSmoking.Repositories.ThinhTHP
             return item ?? new UserNotificationThinhThp();
         }
 
-        public async Task<List<UserNotificationThinhThp>> SearchAsync(string message, DateTime date, int userId)
+        public async Task<List<UserNotificationThinhThp>> SearchAsync(string message, string response, string userName)
         {
             var items = await _context.UserNotificationThinhThps
                 .Include(x => x.NotificationThinhThp).Include(x => x.UserAccount)
                 .Where(x =>
                 (x.NotificationThinhThp.Message.Contains(message) || string.IsNullOrEmpty(message))
-                && (date == DateTime.MinValue || (x.SentDate.HasValue && x.SentDate.Value.Date == date.Date))
-                && (x.UserAccount.UserAccountId == userId) || userId == 0)
+                && (x.Response.Contains(response) || string.IsNullOrEmpty(response))
+                //&& (userId == 0 || x.UserAccount.UserAccountId == userId))
+                && (x.UserAccount.UserName.Contains(userName) || string.IsNullOrEmpty(userName)))
                 .ToListAsync();
             return items ?? new List<UserNotificationThinhThp>();
         }

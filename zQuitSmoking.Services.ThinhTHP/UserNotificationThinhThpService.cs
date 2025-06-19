@@ -44,9 +44,9 @@ namespace zQuitSmoking.Services.ThinhTHP
             return await _unitOfWork.UserNotificationThinhThpRepository.GetByIdAsync(code);
         }
 
-        public async Task<List<UserNotificationThinhThp>> SearchAsync(string message, DateTime date, int userId)
+        public async Task<List<UserNotificationThinhThp>> SearchAsync(string message, string response, string userName)
         {
-            return await _unitOfWork.UserNotificationThinhThpRepository.SearchAsync(message, DateTime.MinValue, userId);
+            return await _unitOfWork.UserNotificationThinhThpRepository.SearchAsync(message, response, userName);
         }
 
         public Task<int> UpdateAsync(UserNotificationThinhThp userNotificationThinhThp)
