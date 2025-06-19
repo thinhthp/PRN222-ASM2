@@ -9,6 +9,16 @@
 <div class="d-flex justify-content-between mb-3">
 	<div>
 		<a href="/UserNotificationThinhThps/UserNotificationThinhThpForm" class="btn btn-sm btn-primary">Create new</a>
+		<!-- Search fields start -->
+		<input class="form-control d-inline-block mx-1" style="width: 180px;" placeholder="Message"
+			   @bind="searchMessage" @bind:event="oninput" />
+		<input class="form-control d-inline-block mx-1" style="width: 150px;" placeholder="Response"
+			   @bind="searchResponse" @bind:event="oninput" />
+		<input class="form-control d-inline-block mx-1" style="width: 100px;" placeholder="Username"
+			   @bind="searchUserNameString" @bind:event="oninput" />
+		<button class="btn btn-sm btn-success mx-1" @onclick="SearchNotifications">Search</button>
+		<button class="btn btn-sm btn-secondary" @onclick="ResetSearch">Reset</button>
+		<!-- Search fields end -->
 	</div>
 </div>
 
@@ -68,6 +78,11 @@ else
 @code {
 	private List<UserNotificationThinhThp> userNotifications;
 
+	// Search fields
+	private string searchMessage = "";
+	private string searchResponse = "";
+	private string searchUserNameString = "";
+
 	protected override async Task OnInitializedAsync()
 	{
 		await Task.Delay(2000);
@@ -95,5 +110,27 @@ else
 			// Handle error case
 			Console.WriteLine("Failed to delete user notification.");
 		}
+	}
+
+	private async Task SearchNotifications()
+	{
+		// int userId = 0;
+		// int.TryParse(searchUserNameString, out userId);
+		userNotifications = await ServiceProviders.UserNotificationThinhThpService.SearchAsync(
+			searchMessage ?? string.Empty,
+			searchResponse ?? string.Empty,
+			searchUserNameString ?? string.Empty
+		);
+		Console.WriteLine(userNotifications.Count); //Debug
+		StateHasChanged();
+	}
+
+	private async Task ResetSearch()
+	{
+		searchMessage = "";
+		searchResponse = "";
+		searchUserNameString = "";
+		userNotifications = await ServiceProviders.UserNotificationThinhThpService.GetAllAsync();
+		StateHasChanged();
 	}
 }
