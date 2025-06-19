@@ -44,5 +44,27 @@ namespace zQuitSmoking.Repositories.ThinhTHP
                 .ToListAsync();
             return items ?? new List<UserNotificationThinhThp>();
         }
+
+        public async Task<(List<UserNotificationThinhThp> items, int totalCount)> SearchAsync(string message, string response, string userName, int? pageNumber = null, int? pageSize = null)
+        {
+            var query = _context.UserNotificationThinhThps
+                .Include(x => x.NotificationThinhThp)
+                .Include(x => x.UserAccount)
+                .Where(x =>
+                    (string.IsNullOrEmpty(message) || x.NotificationThinhThp.Message.Contains(message)) &&
+                    (string.IsNullOrEmpty(response) || x.Response.Contains(response)) &&
+                    (string.IsNullOrEmpty(userName) || x.UserAccount.UserName.Contains(userName))
+                );
+
+            int totalCount = await query.CountAsync();
+
+            if (pageNumber.HasValue && pageSize.HasValue)
+            {
+                query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
+            }
+
+            var items = await query.ToListAsync();
+            return (items, totalCount);
+        }
     }
 }
