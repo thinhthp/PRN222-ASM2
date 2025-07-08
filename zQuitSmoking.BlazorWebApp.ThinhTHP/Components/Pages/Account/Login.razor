@@ -1,0 +1,57 @@
+﻿@page "/login"
+@using zQuitSmoking.BlazorWebApp.ThinhTHP.Models.ViewModels
+
+<h3>Login</h3>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" action="/Account/Login" class="p-4 border rounded shadow-sm bg-light">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" name="UserName" id="username" class="form-control" placeholder="Enter your username" required />
+                    <div class="invalid-feedback">
+                        Please enter a valid username.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="Password" id="password" class="form-control" placeholder="Enter your password" required />
+                    <div class="invalid-feedback">
+                        Please enter your password.
+                    </div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public LoginViewModel Model { get; set; } = new();
+
+    [Inject]
+    public HttpClient HttpClient { get; set; }
+
+    protected override void OnInitialized()
+    {
+        HttpClient.BaseAddress = new Uri(NavigationManager.BaseUri);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var response = await HttpClient.PostAsJsonAsync("api/account/login", Model);
+        if (response.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            // Handle login failure
+            Console.WriteLine("Login failed: " + await response.Content.ReadAsStringAsync());
+        }
+    }
+}

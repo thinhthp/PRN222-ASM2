@@ -1,0 +1,82 @@
+﻿@page "/access-denied"
+
+<div class="access-denied-container">
+    <div class="access-denied-icon">
+        <svg width="100" height="100" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" fill="#ff4d4f" />
+            <path d="M8 8L16 16" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <path d="M16 8L8 16" stroke="white" stroke-width="2" stroke-linecap="round" />
+        </svg>
+    </div>
+    <h1 class="access-denied-title">Access Denied</h1>
+    <p class="access-denied-message">
+        Sorry, you do not have permission to view this page.<br />
+        If you believe this is an error, please contact support.
+    </p>
+    <a href="/" class="btn btn-danger access-denied-btn">Go Home</a>
+</div>
+
+<style>
+    .access-denied-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 70vh;
+        background: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        padding: 40px 20px;
+        animation: fadeIn 1s ease;
+    }
+
+    .access-denied-icon {
+        margin-bottom: 24px;
+        animation: shake 0.6s;
+    }
+
+    .access-denied-title {
+        color: #ff4d4f;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 12px;
+        text-shadow: 1px 2px 8px #fff;
+    }
+
+    .access-denied-message {
+        color: #333;
+        font-size: 1.2rem;
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    .access-denied-btn {
+        font-size: 1.1rem;
+        padding: 10px 28px;
+        border-radius: 24px;
+        box-shadow: 0 2px 8px rgba(255,77,79,0.2);
+        transition: background 0.2s, transform 0.2s;
+    }
+
+    .access-denied-btn:hover {
+        background: #ff7875;
+        transform: scale(1.05);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-30px);}
+        to { opacity: 1; transform: translateY(0);}
+    }
+
+    @@keyframes shake {
+        0% { transform: translateX(0);}
+        20% { transform: translateX(-8px);}
+        40% { transform: translateX(8px);}
+        60% { transform: translateX(-8px);}
+        80% { transform: translateX(8px);}
+        100% { transform: translateX(0);}
+    }
+</style>
+
+@code {
+}
