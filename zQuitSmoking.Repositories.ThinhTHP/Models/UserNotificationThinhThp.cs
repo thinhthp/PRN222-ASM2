@@ -19,7 +19,7 @@ public partial class UserNotificationThinhThp
     public DateTime? SentDate { get; set; }
 
     public bool IsRead { get; set; }
-
+    [Required(ErrorMessage = "Response is required.")]
     [StringLength(500, ErrorMessage = "Response cannot exceed 500 characters.")]
     public string Response { get; set; }
 
